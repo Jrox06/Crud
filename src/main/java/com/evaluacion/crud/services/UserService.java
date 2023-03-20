@@ -29,7 +29,7 @@ public class UserService {
     public UserResponseDto createUser(UserDto userDto) {
         User findUser = this.findUser(userDto.getEmail());
         if (findUser != null) {
-            throw new ExceptionRuntimeHandler("El correo ya se encuentra registrado", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ExceptionRuntimeHandler("El correo ya se encuentra registrado", HttpStatus.BAD_REQUEST);
         }
 
         Boolean validationPassword = validations.validationPassword(userDto.getPassword());
