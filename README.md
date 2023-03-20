@@ -3,6 +3,7 @@
 Path: /users
 Post
 Create User:
+```sh
 {
     "name": "Juan Rodriguez",
     "email": "juan@rodrigue.org",
@@ -20,12 +21,14 @@ Create User:
         }
     ]
 }
-
+```
 Path: /users/find/{id}
 Get
 
 Path: /users/{id}
 Put
+```sh
 {
     "isActive": false
 }
+```
