@@ -37,6 +37,11 @@ public class UserService {
             throw new ExceptionRuntimeHandler("Password no cumple con las condiciones", HttpStatus.BAD_REQUEST);
         }
 
+        Boolean validationEmail = validations.validationEmail(userDto.getEmail());
+        if (!validationEmail) {
+            throw new ExceptionRuntimeHandler("El email no tiene un formato correcto", HttpStatus.BAD_REQUEST);
+        }
+
         User userEntity = userMapper.map(userDto);
 
         this.userRepository.save(userEntity);

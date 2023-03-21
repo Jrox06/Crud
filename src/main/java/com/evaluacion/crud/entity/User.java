@@ -23,7 +23,7 @@ public class User {
     private String token;
     private Boolean isActive;
     @JoinColumn(name = "userId")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Phone> phones;
 
 }
