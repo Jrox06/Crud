@@ -2,6 +2,7 @@
 
 Path: /users
 Post
+Descripcion: Creación de usuario con validacion de formato de email, validación de passowrd y campos no nulleables
 Create User:
 ```sh
 {
@@ -24,9 +25,11 @@ Create User:
 ```
 Path: /users/find/{id}
 Get
+Descripcion: Busqueda de user por id (UUID)
 
 Path: /users/{id}
 Put
+Descripcion: Endpoint para actualizar cualquier campo del Objeto User
 ```sh
 {
     "isActive": false
