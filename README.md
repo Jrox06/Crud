@@ -1,7 +1,8 @@
 # Crud
 
-Path: /users
-Post
+Path: /users<br>
+Post<br>
+Descripcion: Creación de usuario con validacion de formato de email, validación de passowrd y campos no nulleables<br>
 Create User:
 ```sh
 {
@@ -22,11 +23,13 @@ Create User:
     ]
 }
 ```
-Path: /users/find/{id}
-Get
+Path: /users/find/{id}<br>
+Get<br>
+Descripcion: Busqueda de user por id (UUID)<br>
 
-Path: /users/{id}
-Put
+Path: /users/{id}<br>
+Put<br>
+Descripcion: Endpoint para actualizar cualquier campo del Objeto User<br>
 ```sh
 {
     "isActive": false
