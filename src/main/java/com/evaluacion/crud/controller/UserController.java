@@ -1,6 +1,7 @@
 package com.evaluacion.crud.controller;
 
 import com.evaluacion.crud.dto.UserDto;
+import com.evaluacion.crud.entity.User;
 import com.evaluacion.crud.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +32,14 @@ public class UserController {
         return new ResponseEntity<>(this.userService.findUserById(id), HttpStatus.OK);
     }
 
-    @GetMapping("find/email/{email}")
-    public ResponseEntity findUserToEmail(@PathVariable("email") String email) {
-        return new ResponseEntity<>(this.userService.findUser(email), HttpStatus.OK);
+    @GetMapping("find/email")
+    public ResponseEntity findUserToEmail(@RequestParam("email") String email) {
+        return new ResponseEntity<>(this.userService.findUserByEmail(email), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
-        this.userService.updateUser(id, userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
+        return new ResponseEntity<>(this.userService.updateUser(id, userDto), HttpStatus.CREATED);
 
     }
 }

@@ -9,10 +9,10 @@ import java.util.UUID;
 
 @Service
 public interface UserService {
-    public UserResponseDto createUser(UserDto userDto);
-    public User findUserById(UUID id);
+    UserResponseDto createUser(UserDto userDto);
+    User findUserById(UUID id);
 
-    public User findUser(String email);
+    User findUserByEmail(String email);
 
-    public void updateUser(UUID uuid, UserDto userDto);
+    User updateUser(UUID uuid, UserDto userDto);
 }

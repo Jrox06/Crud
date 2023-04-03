@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final Validations validations;
@@ -28,51 +28,49 @@ public class UserServiceImpl implements UserService{
         this.validations = validations;
     }
 
+    @Override
     public UserResponseDto createUser(UserDto userDto) {
-        User findUser = this.findUser(userDto.getEmail());
-        if (findUser != null) {
+        Optional<User> findUser = this.userRepository.findByEmail(userDto.getEmail());
+        if (findUser.isPresent()) {
             throw new ExceptionRuntimeHandler("El correo ya se encuentra registrado", HttpStatus.BAD_REQUEST);
         }
+
         Boolean validationPassword = validations.validationPassword(userDto.getPassword());
         if (!validationPassword) {
             throw new ExceptionRuntimeHandler("Password no cumple con las condiciones", HttpStatus.BAD_REQUEST);
         }
 
         Boolean validationEmail = validations.validationEmail(userDto.getEmail());
-       if (!validationEmail) {
+        if (!validationEmail) {
             throw new ExceptionRuntimeHandler("El email no tiene un formato correcto", HttpStatus.BAD_REQUEST);
         }
 
-         User userEntity = userMapper.map(userDto);
-
+        User userEntity = userMapper.map(userDto);
         this.userRepository.save(userEntity);
-        return userMapper.mapResponseCreate(userEntity);
+        return this.userMapper.mapResponseCreate(userEntity);
     }
 
-    public User findUser(String email) {
-        User user = this.userRepository.findByEmail(email);
-        return user;
+    @Override
+    public User findUserByEmail(String email) {
+        return this.userRepository.findByEmail(email)
+                .orElseThrow(() -> new ExceptionRuntimeHandler("No se encontro registro para el email", HttpStatus.BAD_REQUEST));
     }
-
+    @Override
     public User findUserById(UUID id) {
-        Optional<User> userOptional = this.userRepository.findById(id);
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("No se encontro registro");
-        }
-        return userOptional.orElseThrow();
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionRuntimeHandler("No se encontro resultado para la busqueda", HttpStatus.BAD_REQUEST));
     }
 
-    public void updateUser(UUID uuid, UserDto userDto){
-      Optional<User> optionalUser = userRepository.findById(uuid);
-      if(optionalUser.isPresent()) {
-          User user = optionalUser.get();
-          user.setUpdate(LocalDateTime.now());
-          if(userDto.getIsActive() != null) user.setIsActive(userDto.getIsActive());
-          if(userDto.getName() != null)  user.setName(userDto.getName());
-          if(userDto.getEmail() != null) user.setEmail(userDto.getEmail());
-          if(userDto.getPassword() !=null) user.setPassword(userDto.getPassword());
+    @Override
+    public User updateUser(UUID uuid, UserDto userDto) {
+        User user = this.findUserById(uuid);
 
-          userRepository.save(user);
-      }
+        user.setUpdate(LocalDateTime.now());
+        if (userDto.getIsActive() != null) user.setIsActive(userDto.getIsActive());
+        if (userDto.getName() != null) user.setName(userDto.getName());
+        if (userDto.getEmail() != null) user.setEmail(userDto.getEmail());
+        if (userDto.getPassword() != null) user.setPassword(userDto.getPassword());
+
+        return userRepository.save(user);
     }
 }
