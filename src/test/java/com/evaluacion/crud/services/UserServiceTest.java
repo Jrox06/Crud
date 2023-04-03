@@ -5,7 +5,6 @@ import com.evaluacion.crud.dto.UserDto;
 import com.evaluacion.crud.dto.UserResponseDto;
 import com.evaluacion.crud.entity.User;
 import com.evaluacion.crud.execeptions.ExceptionRuntimeHandler;
-import com.evaluacion.crud.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,9 +23,6 @@ import java.util.List;
 @SpringBootTest
 public class UserServiceTest {
 
-   @Autowired
-   private UserRepository userRepository;
-
     @Autowired
     private UserServiceImpl userService;
 
@@ -34,7 +30,6 @@ public class UserServiceTest {
     UserDto userDto = new UserDto();
     List<PhoneDto> phones = new ArrayList<>();
     PhoneDto phone = new PhoneDto();
-
 
 
     @BeforeEach
@@ -77,10 +72,11 @@ public class UserServiceTest {
         }
     }
 
+    @Test
+    @DisplayName("Error Email: invalid format")
     void errorEmailTest() {
         try {
             userDto.setEmail("joel@a-com");
-            userService.createUser(userDto);
             userService.createUser(userDto);
         } catch (ExceptionRuntimeHandler e) {
             Assertions.assertEquals("El email no tiene un formato correcto", e.getMessage());
